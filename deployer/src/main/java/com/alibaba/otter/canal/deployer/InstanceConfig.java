@@ -5,24 +5,31 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.alibaba.otter.canal.common.utils.CanalToStringStyle;
 
 /**
- * 启动的相关配置
- * 
+ *
+ * canal实例 - 配置类
+ *
+ *
  * @author jianghang 2012-11-8 下午02:50:54
  * @version 1.0.0
  */
 public class InstanceConfig {
 
+    // 全局配置
     private InstanceConfig globalConfig;
-    private InstanceMode   mode;
-    private Boolean        lazy;
-    private String         managerAddress;
-    private String         springXml;
+    // 实例的启动模式，spring还是manager
+    private InstanceMode mode;
+    // 是否延时初始化
+    private Boolean lazy;
+    // manager对应的地址
+    private String managerAddress;
+    // spring配置文件路径
+    private String springXml;
 
-    public InstanceConfig(){
+    public InstanceConfig() {
 
     }
 
-    public InstanceConfig(InstanceConfig globalConfig){
+    public InstanceConfig(InstanceConfig globalConfig) {
         this.globalConfig = globalConfig;
     }
 

@@ -14,6 +14,13 @@ import org.slf4j.LoggerFactory;
  * @author jianghang 2012-11-6 下午05:20:49
  * @version 1.0.0
  */
+
+// deployer模块的主要作用：
+// 1、读取canal.properties，确定canal instance的配置加载方式
+// 2、确定canal instance的启动方式：独立启动或者集群方式启动
+// 3、监听canal instance的配置的变化，动态停止、启动或新增
+// 4、启动canal server，监听客户端请求
+
 public class CanalLauncher {
 
     private static final String CLASSPATH_URL_PREFIX = "classpath:";
@@ -21,6 +28,8 @@ public class CanalLauncher {
 
     public static void main(String[] args) throws Throwable {
         try {
+
+            //1、读取canal.properties文件中配置，默认读取classpath下的canal.properties
             String conf = System.getProperty("canal.conf", "classpath:canal.properties");
             Properties properties = new Properties();
             if (conf.startsWith(CLASSPATH_URL_PREFIX)) {
@@ -30,10 +39,14 @@ public class CanalLauncher {
                 properties.load(new FileInputStream(conf));
             }
 
+            //2、启动canal，首先将properties对象传递给CanalController，然后调用其start方法启动
             logger.info("## start the canal server.");
             final CanalController controller = new CanalController(properties);
+            //启动controller
             controller.start();
             logger.info("## the canal server is running now ......");
+
+            //3、关闭canal，通过添加JVM的钩子，JVM停止前会回调run方法，其内部调用controller.stop()方法进行停止
             Runtime.getRuntime().addShutdownHook(new Thread() {
 
                 public void run() {
