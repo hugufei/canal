@@ -61,11 +61,12 @@ public class CanalInstanceWithSpring extends CanalInstanceSupport implements Can
         return alarmHandler;
     }
 
+    // subscribeChange方法，主要是更新一下eventParser中的filter。
     public boolean subscribeChange(ClientIdentity identity) {
+        // 如果设置了filter
         if (StringUtils.isNotEmpty(identity.getFilter())) {
             logger.info("subscribe filter change to " + identity.getFilter());
             AviaterRegexFilter aviaterFilter = new AviaterRegexFilter(identity.getFilter());
-
             boolean isGroup = (eventParser instanceof GroupEventParser);
             if (isGroup) {
                 // 处理group的模式
@@ -76,7 +77,6 @@ public class CanalInstanceWithSpring extends CanalInstanceSupport implements Can
             } else {
                 ((AbstractEventParser) eventParser).setEventFilter(aviaterFilter);
             }
-
         }
 
         // filter的处理规则
@@ -86,16 +86,19 @@ public class CanalInstanceWithSpring extends CanalInstanceSupport implements Can
         return true;
     }
 
+    // 在eventParser启动后，会调用afterStartEventParser方法。
+    // 这个方法内部主要是通过metaManager读取一下历史订阅过这个CanalInstance的客户端信息，然后更新一下filter。
     protected void afterStartEventParser(CanalEventParser eventParser) {
         super.afterStartEventParser(eventParser);
-
         // 读取一下历史订阅的filter信息
         List<ClientIdentity> clientIdentitys = metaManager.listAllSubscribeInfo(destination);
         for (ClientIdentity clientIdentity : clientIdentitys) {
+            // 更新filter
             subscribeChange(clientIdentity);
         }
     }
 
+    // 启动各个模块。启动顺序为：metaManager—>eventStore—>eventSink—>eventParser。
     public void start() {
         super.start();
 
@@ -113,14 +116,17 @@ public class CanalInstanceWithSpring extends CanalInstanceSupport implements Can
         }
 
         if (!eventParser.isStart()) {
+            // 启动前执行一些操作
             beforeStartEventParser(eventParser);
             eventParser.start();
+            // 启动后执行一些操作
             afterStartEventParser(eventParser);
         }
 
         logger.info("start successful....");
     }
 
+    // stop顺序与启动顺序刚好相反
     public void stop() {
         logger.info("stop CannalInstance for {}-{} ", new Object[] { 1, destination });
         if (eventParser.isStart()) {
@@ -154,7 +160,6 @@ public class CanalInstanceWithSpring extends CanalInstanceSupport implements Can
     }
 
     // ======== setter ========
-
     public void setDestination(String destination) {
         this.destination = destination;
     }

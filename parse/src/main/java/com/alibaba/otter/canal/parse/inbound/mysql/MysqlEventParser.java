@@ -35,14 +35,15 @@ import com.taobao.tddl.dbsync.binlog.LogEvent;
 
 /**
  * 基于向mysql server复制binlog实现
- * 
- * <pre>
+ *
+ * 伪装成单个mysql实例的slave解析binglog日志
+ *
  * 1. 自身不控制mysql主备切换，由ha机制来控制. 比如接入tddl/cobar/自身心跳包成功率
  * 2. 切换机制
- * </pre>
- * 
+ *
  * @author jianghang 2012-6-21 下午04:06:32
  * @version 1.0.0
+ *
  */
 public class MysqlEventParser extends AbstractMysqlEventParser implements CanalEventParser, CanalHASwitchable {
 

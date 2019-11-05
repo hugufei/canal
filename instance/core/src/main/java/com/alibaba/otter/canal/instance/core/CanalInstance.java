@@ -10,22 +10,31 @@ import com.alibaba.otter.canal.store.CanalEventStore;
 
 /**
  * 代表单个canal实例，比如一个destination会独立一个实例
+ *
+ * instance模块其实是把这几个模块组装在一起，为客户端的binlog订阅请求提供服务。有些模块都有多种实现，不同组合方式，最终确定了一个CanalInstance的工作逻辑。
+ *
  * 
  * @author jianghang 2012-7-12 下午12:04:58
  * @version 1.0.0
  */
 public interface CanalInstance extends CanalLifeCycle {
 
+    // 这个instance对应的destination
     String getDestination();
 
+    // 数据源接入，模拟slave协议和master进行交互，协议解析，位于canal.parse模块中
     CanalEventParser getEventParser();
 
+    // parser和store链接器，进行数据过滤，加工，分发的工作，位于canal.sink模块中
     CanalEventSink getEventSink();
 
+    // 数据存储，位于canal.store模块中
     CanalEventStore getEventStore();
 
+    // 增量订阅&消费元数据管理器，位于canal.meta模块中
     CanalMetaManager getMetaManager();
 
+    // 告警，位于canal.common块中
     CanalAlarmHandler getAlarmHandler();
 
     /**

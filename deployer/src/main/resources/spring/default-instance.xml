@@ -10,6 +10,7 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd"
 	default-autowire="byName">
 
+	<!-- 所有的组件(parser , sink , store)都选择了持久化模式，目前持久化的方式主要是写入zookeeper，保证数据集群共享 -->
 	<!-- properties -->
 	<bean class="com.alibaba.otter.canal.instance.spring.support.PropertyPlaceholderConfigurer" lazy-init="false">
 		<property name="ignoreResourceNotFound" value="true" />
@@ -52,7 +53,8 @@
 	
 	<!-- 报警处理类 -->
 	<bean id="alarmHandler" class="com.alibaba.otter.canal.common.alarm.LogAlarmHandler" />
-	
+
+	<!-- 注意，由于default-instance.xml支持通过ZK来进行HA保障，所以多了此项配置-->
 	<bean id="zkClientx" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" >
 		<property name="targetClass" value="com.alibaba.otter.canal.common.zookeeper.ZkClientx" />
 		<property name="targetMethod" value="getZkClient" />

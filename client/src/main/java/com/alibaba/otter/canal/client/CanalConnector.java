@@ -47,7 +47,7 @@ public interface CanalConnector {
 
     /**
      * 客户端订阅，重复订阅时会更新对应的filter信息
-     * 
+     *
      * <pre>
      * 说明：
      * a. 如果本次订阅中filter信息为空，则直接使用canal server服务端配置的filter信息

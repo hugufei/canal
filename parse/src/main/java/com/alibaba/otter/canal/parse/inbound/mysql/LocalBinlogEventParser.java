@@ -11,8 +11,10 @@ import com.alibaba.otter.canal.protocol.position.EntryPosition;
 import com.alibaba.otter.canal.protocol.position.LogPosition;
 
 /**
+ * 解析本地的mysql binlog。例如将mysql的binlog文件拷贝到canal的机器上进行解析。
+ * <p>
  * 基于本地binlog文件的复制
- * 
+ *
  * @author jianghang 2012-6-21 下午04:07:33
  * @version 1.0.0
  */
@@ -20,13 +22,13 @@ public class LocalBinlogEventParser extends AbstractMysqlEventParser implements 
 
     // 数据库信息
     private AuthenticationInfo masterInfo;
-    private EntryPosition      masterPosition;        // binlog信息
+    private EntryPosition masterPosition;        // binlog信息
 
-    private String             directory;
-    private boolean            needWait   = false;
-    private int                bufferSize = 16 * 1024;
+    private String directory;
+    private boolean needWait = false;
+    private int bufferSize = 16 * 1024;
 
-    public LocalBinlogEventParser(){
+    public LocalBinlogEventParser() {
         // this.runningInfo = new AuthenticationInfo();
     }
 

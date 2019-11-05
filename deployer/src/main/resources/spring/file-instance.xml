@@ -10,6 +10,7 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd"
 	default-autowire="byName">
 
+	<!-- 所有的组件(parser , sink , store)都选择了基于file持久化模式，注意，不支持HA机制 -->
 	<!-- properties -->
 	<bean class="com.alibaba.otter.canal.instance.spring.support.PropertyPlaceholderConfigurer" lazy-init="false">
 		<property name="ignoreResourceNotFound" value="true" />
