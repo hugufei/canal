@@ -8,6 +8,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.alibaba.otter.canal.common.utils.CanalToStringStyle;
 
 /**
+ *
+ * 客户端身份的标识
+ *
  * @author zebin.xuzb @ 2012-6-20
  * @version 1.0.0
  */

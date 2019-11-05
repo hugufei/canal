@@ -52,19 +52,20 @@ public class SessionHandler extends SimpleChannelHandler {
         this.embeddedServer = embeddedServer;
     }
 
+    // messageReceived方法表示收到客户端请求
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
         logger.info("message receives in session handler...");
         ChannelBuffer buffer = (ChannelBuffer) e.getMessage();
         Packet packet = Packet.parseFrom(buffer.readBytes(buffer.readableBytes()).array());
         ClientIdentity clientIdentity = null;
         try {
+            // 根据客户端发送的网路通信包请求类型type，将请求委派embeddedServer处理
             switch (packet.getType()) {
+                // 订阅请求
                 case SUBSCRIPTION:
                     Sub sub = Sub.parseFrom(packet.getBody());
                     if (StringUtils.isNotEmpty(sub.getDestination()) && StringUtils.isNotEmpty(sub.getClientId())) {
-                        clientIdentity = new ClientIdentity(sub.getDestination(),
-                            Short.valueOf(sub.getClientId()),
-                            sub.getFilter());
+                        clientIdentity = new ClientIdentity(sub.getDestination(),Short.valueOf(sub.getClientId()), sub.getFilter());
                         MDC.put("destination", clientIdentity.getDestination());
                         embeddedServer.subscribe(clientIdentity);
 
@@ -85,6 +86,7 @@ public class SessionHandler extends SimpleChannelHandler {
                             null);
                     }
                     break;
+                // 取消订阅请求
                 case UNSUBSCRIPTION:
                     Unsub unsub = Unsub.parseFrom(packet.getBody());
                     if (StringUtils.isNotEmpty(unsub.getDestination()) && StringUtils.isNotEmpty(unsub.getClientId())) {
@@ -102,6 +104,7 @@ public class SessionHandler extends SimpleChannelHandler {
                             null);
                     }
                     break;
+                // 获取binlog请求
                 case GET:
                     Get get = CanalPacket.Get.parseFrom(packet.getBody());
                     if (StringUtils.isNotEmpty(get.getDestination()) && StringUtils.isNotEmpty(get.getClientId())) {
@@ -123,10 +126,7 @@ public class SessionHandler extends SimpleChannelHandler {
                             message = embeddedServer.getWithoutAck(clientIdentity, get.getFetchSize());
                         } else {
                             TimeUnit unit = convertTimeUnit(get.getUnit());
-                            message = embeddedServer.getWithoutAck(clientIdentity,
-                                get.getFetchSize(),
-                                get.getTimeout(),
-                                unit);
+                            message = embeddedServer.getWithoutAck(clientIdentity,get.getFetchSize(), get.getTimeout(),unit);
                         }
                         // }
 
@@ -149,6 +149,8 @@ public class SessionHandler extends SimpleChannelHandler {
                             null);
                     }
                     break;
+
+                // 客户端消费成功ack请求
                 case CLIENTACK:
                     ClientAck ack = CanalPacket.ClientAck.parseFrom(packet.getBody());
                     MDC.put("destination", ack.getDestination());
@@ -171,6 +173,7 @@ public class SessionHandler extends SimpleChannelHandler {
                             null);
                     }
                     break;
+                // 客户端消费失败回滚请求
                 case CLIENTROLLBACK:
                     ClientRollback rollback = CanalPacket.ClientRollback.parseFrom(packet.getBody());
                     MDC.put("destination", rollback.getDestination());
@@ -191,6 +194,8 @@ public class SessionHandler extends SimpleChannelHandler {
                             null);
                     }
                     break;
+
+                // 无法判断请求类型
                 default:
                     NettyUtils.error(400, MessageFormatter.format("packet type={} is NOT supported!", packet.getType())
                         .getMessage(), ctx.getChannel(), null);
