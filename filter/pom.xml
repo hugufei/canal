@@ -21,19 +21,28 @@
 			<artifactId>canal.protocol</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<!--是一个开源的、高性能、轻量级的 java 语言实现的表达式求值引擎-->
 		<dependency>
 			<groupId>com.googlecode.aviator</groupId>
 			<artifactId>aviator</artifactId>
 		</dependency>
+
+		<!--全称为Jakarta ORO，最全面以及优化得最好的正则表达式API之一-->
+		<!--Jakarta-ORO库以前叫做OROMatcher，是由DanielF. Savarese编写，后来捐赠给了apache Jakarta Project。-->
+		<!--canal的过滤规则就是通过oro中的Perl5Matcher来进行完成的。-->
+		<!--显然，对于filter模块的源码解析，实际上主要变成了对aviator、oro的分析。-->
 		<dependency>
 			<groupId>oro</groupId>
 			<artifactId>oro</artifactId>
 		</dependency>
+
 		<!-- test dependency -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 </project>

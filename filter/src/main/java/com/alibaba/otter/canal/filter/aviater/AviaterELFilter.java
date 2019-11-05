@@ -11,7 +11,7 @@ import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.googlecode.aviator.AviatorEvaluator;
 
 /**
- * 基于aviater el表达式的匹配过滤
+ * 基于Aviator el表达式的匹配过滤
  * 
  * @author jianghang 2012-7-23 上午10:46:32
  */

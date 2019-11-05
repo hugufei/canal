@@ -102,12 +102,14 @@
 		<property name="alarmHandler" ref="alarmHandler" />
 		
 		<!-- 解析过滤处理 -->
+		<!-- 使用配置项canal.instance.filter.regex的值进行白名单过滤 -->
 		<property name="eventFilter">
 			<bean class="com.alibaba.otter.canal.filter.aviater.AviaterRegexFilter" >
 				<constructor-arg index="0" value="${canal.instance.filter.regex:.*\..*}" />
 			</bean>
 		</property>
-		
+
+		<!-- 使用配置项canal.instance.filter.black.regex的值进行白名单过滤 -->
 		<property name="eventBlackFilter">
 			<bean class="com.alibaba.otter.canal.filter.aviater.AviaterRegexFilter" >
 				<constructor-arg index="0" value="${canal.instance.filter.black.regex:}" />

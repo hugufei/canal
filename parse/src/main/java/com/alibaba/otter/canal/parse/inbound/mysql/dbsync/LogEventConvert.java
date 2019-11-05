@@ -296,6 +296,7 @@ public class LogEventConvert extends AbstractCanalLifeCycle implements BinlogPar
         return createEntry(header, EntryType.TRANSACTIONEND, transactionEnd.toByteString());
     }
 
+    //
     private Entry parseRowsEvent(RowsLogEvent event) {
         try {
             TableMapLogEvent table = event.getTable();
@@ -306,9 +307,11 @@ public class LogEventConvert extends AbstractCanalLifeCycle implements BinlogPar
 
             String fullname = table.getDbName() + "." + table.getTableName();
             // check name filter
+            // 先使用nameFilter进行白名单过滤
             if (nameFilter != null && !nameFilter.filter(fullname)) {
                 return null;
             }
+            // 再使用nameBlackFilter进行黑名单过滤
             if (nameBlackFilter != null && nameBlackFilter.filter(fullname)) {
                 return null;
             }
