@@ -7,6 +7,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.alibaba.otter.canal.common.utils.CanalToStringStyle;
 
 /**
+ *
+ * 记录这个Event的来源信息:mysql地址(sourceAddress)和slaveId
+ *
  * @author jianghang 2012-6-21 上午10:52:02
  * @version 1.0.0
  */

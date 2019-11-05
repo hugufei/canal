@@ -10,15 +10,15 @@ import com.alibaba.otter.canal.protocol.position.LogIdentity;
 
 /**
  * store存储数据对象
- * 
+ *
  * @author jianghang 2012-7-13 下午03:03:03
  */
 public class Event implements Serializable {
 
     private static final long serialVersionUID = 1333330351758762739L;
 
-    private LogIdentity       logIdentity;                            // 记录数据产生的来源
-    private CanalEntry.Entry  entry;
+    private LogIdentity       logIdentity;  // 记录这个Event的来源信息:mysql地址(sourceAddress)和slaveId
+    private CanalEntry.Entry  entry; // 封装了binlog事件的数据
 
     public Event(){
     }

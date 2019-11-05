@@ -11,7 +11,11 @@ import com.alibaba.otter.canal.protocol.position.PositionRange;
 
 /**
  * 代表一组数据对象的集合
- * 
+ *
+ * 仅仅是通过一个List维护了一组数据，尽管这里定义的是泛型，但真实放入的数据实际上是Event类型。
+ * 而PositionRange是protocol模块中的类，描述了这组Event的开始(start)和结束位置(end)，
+ * 显然，start表示List集合中第一个Event的位置，end表示最后一个Event的位置。
+ *
  * @author jianghang 2012-6-14 下午09:07:41
  * @version 1.0.0
  */
